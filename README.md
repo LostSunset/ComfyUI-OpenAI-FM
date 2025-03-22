@@ -13,7 +13,6 @@ The `OpenAI FM TTS` node is a custom node for ComfyUI that seamlessly integrates
 -   **Text-to-speech Conversion:** Leverages the OpenAI FM API to convert input text into high-quality speech.
 -   **Voice Selection:** Offers a dropdown menu populated from `data/voices.json`, allowing you to choose from a variety of available voices.
 -   **Vibe Control:** Incorporates emotional styles using `data/vibes.json`, enabling you to generate speech with different emotional tones to match the context of your project.
--   **Seed Parameter:** Includes a 'seed' input for reproducible audio generation. Using the same seed ensures consistent output for the same input text, voice, and vibe. Setting seed to `0` will use a random seed.
 -   **ComfyUI AUDIO Output:**  Outputs an `AUDIO` signal that is directly compatible with ComfyUI's audio processing pipeline.
 -   **Audio File Saving:** Automatically saves generated audio files to the `output` directory for easy access and later use.
 

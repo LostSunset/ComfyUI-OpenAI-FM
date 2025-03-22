@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-openai-fm"
 description = "The OpenAI FM TTS node is a custom node for ComfyUI that seamlessly integrates the OpenAI FM Text-to-Speech service into your audio workflows. This node allows you to easily convert text to speech with a variety of voices and emotional styles directly within ComfyUI. "
-version = "1.0.1"
+version = "1.0.2"
 license = {file = "LICENSE"}
 dependencies = ["requests>=2.26.0", "torch", "torchaudio"]
 
