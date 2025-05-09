@@ -66,6 +66,19 @@ The `OpenAI FM TTS` node is a custom node for ComfyUI that seamlessly integrates
 -   **ComfyUI AUDIO Output:** The node produces an `AUDIO` output signal, which can be directly connected to other ComfyUI audio processing nodes or a Save Audio node. The audio is a tensor in ComfyUI format: `[batch, channels, samples]` with a sample rate of 44100Hz.
 -   **Saved Audio Files:** Generated audio files are automatically saved. By default, they are saved in `ComfyUI/custom_nodes/ComfyUI-OpenAI-FM/output/`. If this directory is not writable, the script will attempt to save to `ComfyUI/output/` or the script directory itself. Filenames are prefixed with `openaifm_` and include a timestamp for easy identification. The audio files are saved in WAV format.
 
+---
+## Changelog
+
+1. The "vibe" dropdown in `INPUT_TYPES` now defaults to "---", making it appear empty or disabled by default.
+
+2. The `generate` method's logic has been updated:
+
+   - It first checks if `optional_vibe_text` has content. If so, that text is used.
+   - If `optional_vibe_text` is empty, it then checks the "vibe" dropdown. If the dropdown's value is not "---" (meaning the user selected a specific vibe), that selected vibe is used.
+   - If both `optional_vibe_text` is empty and the "vibe" dropdown is still "---", the system will default to using the "Calm" vibe to prevent errors.
+
+---
+
 ## Legal Disclaimer
 
 This project is intended for educational and personal use only. It is not affiliated with, endorsed by, or officially supported by OpenAI. Use of the OpenAI FM API is subject to their terms of service. Reverse engineering was employed to understand the API for the purpose of creating this tool. Please ensure your usage complies with all applicable terms and legal standards.

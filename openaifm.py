@@ -12,16 +12,23 @@ class OPENAIFM:
         try:
             voices = cls.load_json_file("voices.json")
             vibes = cls.load_json_file("vibes.json")
+            vibe_options = ["---"] + list(vibes.keys())
         except Exception as e:
             print(f"Error loading voice/vibe data: {e}")
             voices = {"voices": ["ALLoy"]}
-            vibes = {"Calm": []}
+            vibes = {"Calm": []} # Used in generate method
+            vibe_options = ["---", "Calm"]
             
-        return {"required": {
-            "text": ("STRING", {"multiline": True, "default": "Enter text here"}),
-            "voice": (voices["voices"], {"default": "ALLoy"}),
-            "vibe": (list(vibes.keys()), {"default": "Calm"}),
-        }}
+        return {
+            "required": {
+                "text": ("STRING", {"multiline": True, "default": "Enter text here"}),
+                "voice": (voices["voices"], {"default": "Shimmer"}),
+                "vibe": (vibe_options, {"default": "---"}), 
+            },
+            "optional": { 
+                "optional_vibe_text": ("STRING", {"multiline": True, "default": ""}),
+            }
+        }
     
     RETURN_TYPES = ("AUDIO",)
     FUNCTION = "generate"
@@ -41,11 +48,23 @@ class OPENAIFM:
             
         return data
     
-    def generate(self, text, voice, vibe):
+    def generate(self, text, voice, vibe, optional_vibe_text=""): # Add optional_vibe_text
         try:
-            # Get vibe prompt
             vibes_data = self.load_json_file("vibes.json")
-            vibe_prompt = self.format_vibe_prompt(vibe, vibes_data)
+            
+            final_vibe_content = ""
+            # Prioritize optional_vibe_text if it has content
+            if optional_vibe_text and optional_vibe_text.strip():
+                final_vibe_content = optional_vibe_text.strip()
+                print(f"Using custom vibe text: '{final_vibe_content[:50]}...'")
+            elif vibe != "---": # Check if dropdown is not the placeholder
+                final_vibe_content = self.format_vibe_prompt(vibe, vibes_data)
+                print(f"Using dropdown vibe '{vibe}': '{final_vibe_content[:50]}...'")
+            else: # Both optional_vibe_text is empty AND vibe dropdown is "---"
+                final_vibe_content = self.format_vibe_prompt("Calm", vibes_data)
+                print(f"Defaulting to 'Calm' vibe: '{final_vibe_content[:50]}...'")
+                
+            vibe_prompt = final_vibe_content # This is then used in send_request
             
             # Send request to OpenAI FM
             audio_data = self.send_request(text, voice, vibe_prompt)
